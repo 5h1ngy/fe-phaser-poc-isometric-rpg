@@ -20,26 +20,14 @@
         "noFallthroughCasesInSwitch": true,
         "baseUrl": "./",
         "paths": {
-            "@app/assets/*": [
-                "app/src/assets/*"
+            "@app/*": [
+                "app/src/*"
             ],
-            "@app/components/*": [
-                "app/src/components/*"
+            "@public/*": [
+                "app/public/*"
             ],
-            "@app/containers/*": [
-                "app/src/containers/*"
-            ],
-            "@app/hocs/*": [
-                "app/src/hocs/*"
-            ],
-            "@app/pages/*": [
-                "app/src/pages/*"
-            ],
-            "@app/services/*": [
-                "app/src/services/*"
-            ],
-            "@app/store/*": [
-                "app/src/store/*"
+            "@assets/*": [
+                "app/public/assets/*"
             ]
         }
     },

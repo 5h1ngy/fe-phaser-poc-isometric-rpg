@@ -10,12 +10,20 @@ import path from 'path'
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
   root: path.resolve(__dirname, 'app'),
-  base: './',
-  publicDir: '/public',
-  cacheDir: path.resolve(__dirname, '.vite'),
+  base: "./",
+  publicDir: path.resolve(__dirname, 'app', 'public'),
   plugins: [
     jsonX(),
     dynamicImport(),
+    {
+      name: "markdown-loader",
+      transform(code, id) {
+        if (id.slice(-3) === ".md") {
+          // For .md files, get the raw content
+          return `export default ${JSON.stringify(code)};`;
+        }
+      }
+    },
     viteStaticCopy({
       targets: [
         {
@@ -27,29 +35,25 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@app/assets': path.resolve(__dirname, 'app', 'src', 'assets'),
-      '@app/components': path.resolve(__dirname, 'app', 'src', 'components'),
-      '@app/containers': path.resolve(__dirname, 'app', 'src', 'containers'),
-      '@app/hocs': path.resolve(__dirname, 'app', 'src', 'hocs'),
-      '@app/pages': path.resolve(__dirname, 'app', 'src', 'pages'),
-      '@app/services': path.resolve(__dirname, 'app', 'src', 'services'),
-      '@app/store': path.resolve(__dirname, 'app', 'src', 'store'),
+      '@public': path.resolve(__dirname, 'app', 'public'),
+      '@assets': path.resolve(__dirname, 'app', 'public', 'assets'),
+      '@app': path.resolve(__dirname, 'app', 'src'),
     },
   },
   build: {
 
+    target: 'esnext',
     outDir: path.resolve(__dirname, 'dist'),
-    copyPublicDir: true,
-    assetsDir: './js/',
+    copyPublicDir: false,
     emptyOutDir: false,
     sourcemap: false,
 
     rollupOptions: {
       treeshake: true,
       output: {
-        entryFileNames: `js/main.js`,
-        chunkFileNames: `js/[hash].js`,
-        assetFileNames: `js/[hash].[ext]`
+        entryFileNames: `main.js`,
+        chunkFileNames: `[hash].js`,
+        assetFileNames: `[hash].[ext]`
       },
     },
   }

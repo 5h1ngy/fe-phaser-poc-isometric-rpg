@@ -1,0 +1,17 @@
+{
+    "bundles": [
+        {
+            "name": "spritesheet",
+            "assets": [
+                {
+                    "alias": "lpcNaked",
+                    "src": "public/assets/spritesheet/lpc_naked.png"
+                },
+                {
+                    "alias": "aiBlocks",
+                    "src": "public/assets/tileset/ai_blocks.png"
+                }
+            ]
+        }
+    ]
+}

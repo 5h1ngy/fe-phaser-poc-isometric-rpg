@@ -1,5 +1,5 @@
 {
-  "name": "fe-pixijs-poc-isometric-test-1",
+  "name": "fe-pixijs-test-isometric-rpg",
   "private": true,
   "version": "0.0.1",
   "type": "module",
@@ -14,7 +14,9 @@
     "clean": "rm -rfdv node_modules .yarn-cache .vite dist"
   },
   "devDependencies": {
+    "gsap": "^3.12.5",
     "lodash": "^4.17.21",
+    "mathjs": "^13.0.3",
     "pixi.js": "^8.2.6",
     "prop-types": "15.8.1",
     "rollup-plugin-json5": "^1.0.0",

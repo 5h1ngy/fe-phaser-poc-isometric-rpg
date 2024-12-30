@@ -1,30 +1,42 @@
 {
-  "name": "fe-pixijs-test-isometric-rpg",
-  "private": true,
-  "version": "0.0.1",
-  "type": "module",
-  "engines": {
-    "node": ">=20.14.0"
+  "name": "fe-phaser-poc-isometric-rpg",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "A proof of concept for an isometric RPG game using Phaser and TypeScript.",
+  "keywords": [
+    "phaser",
+    "typescript",
+    "isometric",
+    "rpg",
+    "game development",
+    "vite"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/5h1ngy/fe-phaser-poc-isometric-rpg.git"
   },
-  "packageManager": "yarn@4.3.0",
+  "author": "5h1ngy",
+  "engines": {
+    "node": ">=20.18.0",
+    "yarn": ">=4.5.1"
+  },
+  "packageManager": "yarn@4.5.1",
+  "type": "module",
   "scripts": {
-    "start:dev": "vite",
-    "start:prod": "vite preview",
-    "build:prod": "vite build",
-    "clean": "rm -rfdv node_modules .yarn-cache .vite dist"
+    "start:mock": "vite --host 0.0.0.0 --port 5173 --mode mock",
+    "start:dev": "vite --host 0.0.0.0 --port 5173 --mode dev",
+    "start:prod": "vite preview --host 0.0.0.0 --port 5174 --mode prod --outDir build/fe-phaser-poc-isometric-rpg",
+    "build:prod": "tsc -b && vite build --mode prod --outDir build/fe-phaser-poc-isometric-rpg",
+    "clean": "rm -rfdv build node_modules .yarn .yarn-cache",
+    "update": "yarn up '*@latest'"
   },
   "devDependencies": {
+    "@types/node": "^22.10.2",
+    "dotenv": "^16.4.5",
     "gsap": "^3.12.5",
-    "lodash": "^4.17.21",
-    "mathjs": "^13.0.3",
-    "pixi.js": "^8.2.6",
-    "prop-types": "15.8.1",
-    "rollup-plugin-json5": "^1.0.0",
-    "sass": "^1.77.4",
-    "typescript": "^5.5.3",
-    "vite": "^5.2.13",
-    "vite-plugin-dynamic-import": "^1.5.0",
-    "vite-plugin-jsonx": "^1.1.2",
-    "vite-plugin-static-copy": "^1.0.3"
+    "phaser": "^3.87.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.5",
+    "vite-tsconfig-paths": "^5.1.3"
   }
 }

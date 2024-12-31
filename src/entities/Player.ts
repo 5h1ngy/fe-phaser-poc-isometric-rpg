@@ -1,7 +1,7 @@
-import Phaser from 'phaser';
-
 export default class Player extends Phaser.GameObjects.Sprite {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+    private velocityX: number = 0;
+    private velocityY: number = 0;
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
         super(scene, x, y, texture);
@@ -53,43 +53,52 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     update(scene: Phaser.Scene, speed: number) {
-        let velocityX = 0;
-        let velocityY = 0;
+        this.velocityX = 0;
+        this.velocityY = 0;
 
         // Controlla gli input per il movimento
         if (this.cursors.left?.isDown || scene.input.keyboard!.keys[65]?.isDown) {
-            velocityX = -speed;
-            velocityY = speed / 2;
+            this.velocityX = -speed;
+            this.velocityY = speed / 2;
             if (this.anims.currentAnim?.key !== 'walkLeft') {
                 this.play('walkLeft', true);
             }
         } else if (this.cursors.right?.isDown || scene.input.keyboard!.keys[68]?.isDown) {
-            velocityX = speed;
-            velocityY = -speed / 2;
+            this.velocityX = speed;
+            this.velocityY = -speed / 2;
             if (this.anims.currentAnim?.key !== 'walkRight') {
                 this.play('walkRight', true);
             }
         } else if (this.cursors.up?.isDown || scene.input.keyboard!.keys[87]?.isDown) {
-            velocityX = -speed;
-            velocityY = -speed / 2;
+            this.velocityX = -speed;
+            this.velocityY = -speed / 2;
             if (this.anims.currentAnim?.key !== 'walkUp') {
                 this.play('walkUp', true);
             }
         } else if (this.cursors.down?.isDown || scene.input.keyboard!.keys[83]?.isDown) {
-            velocityX = speed;
-            velocityY = speed / 2;
+            this.velocityX = speed;
+            this.velocityY = speed / 2;
             if (this.anims.currentAnim?.key !== 'walkDown') {
                 this.play('walkDown', true);
             }
         } else {
-            // Gioca l'animazione "stand" e poi ferma altre animazioni
             if (this.anims.currentAnim?.key !== 'stand') {
                 this.play('stand', true);
             }
         }
 
         // Aggiorna la posizione del giocatore
-        this.x += velocityX * (1 / scene.game.loop.actualFps);
-        this.y += velocityY * (1 / scene.game.loop.actualFps);
+        this.x += this.velocityX * (1 / scene.game.loop.actualFps);
+        this.y += this.velocityY * (1 / scene.game.loop.actualFps);
+    }
+
+    stopMovement() {
+        // Imposta velocità a 0 per bloccare il movimento
+        this.velocityX = 0;
+        this.velocityY = 0;
+        
+        if (this.anims.currentAnim?.key !== 'stand') {
+            this.play('stand', true);
+        }
     }
 }

@@ -10,13 +10,14 @@ export default class MainScene extends Phaser.Scene {
     private mapData: number[][] = [];
     private resizing = false;
     private tileFrames: { [key: number]: string } = {
-        0: 'water_0',
+        0: 'water_0', // Blocco d'acqua
         1: 'stone_0',
         2: 'terrain_0',
         3: 'sand_0',
         4: 'grass_0',
         5: 'snow_0',
     };
+    private collisionTiles = [0]; // Blocchi considerati come ostacoli
 
     constructor() {
         super('MainScene');
@@ -52,7 +53,23 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update() {
-        this.player.update(this, 100); // Aggiorna il movimento del player
+        // Ottieni la posizione del giocatore sulla griglia
+        const gridX = Math.floor(this.player.x / (this.tileSize * 1.5 / 2));
+        const gridY = Math.floor(this.player.y / (this.tileSize * 1.5 / 4));
+
+        // Blocca il movimento se il giocatore tenta di entrare in un blocco d'acqua
+        if (
+            gridX >= 0 &&
+            gridY >= 0 &&
+            gridX < this.mapSize &&
+            gridY < this.mapSize &&
+            this.collisionTiles.includes(this.mapData[gridY][gridX])
+        ) {
+            DebugLogger.log('update', `Player collided with a water block at (${gridX}, ${gridY}).`);
+            this.player.stopMovement(); // Interrompi il movimento
+        } else {
+            this.player.update(this, 100); // Aggiorna il movimento del player
+        }
     }
 
     private createTilemap() {
@@ -87,7 +104,6 @@ export default class MainScene extends Phaser.Scene {
         layer.setDepth(0);
         DebugLogger.log('createTilemap', 'Isometric tilemap created successfully.');
     }
-
 
     private handleResize(gameSize: { width: number; height: number }) {
         if (this.resizing) return;

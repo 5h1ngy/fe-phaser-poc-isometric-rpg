@@ -31,14 +31,36 @@ export default class MainScene extends Phaser.Scene {
         DebugLogger.log('preload', 'Assets loaded successfully.');
     }
 
+    private findValidPlayerPosition(): { startX: number; startY: number } {
+        while (true) {
+            const randomX = Math.floor(Math.random() * this.mapSize);
+            const randomY = Math.floor(Math.random() * this.mapSize);
+
+            // Verifica che il blocco non sia acqua
+            if (this.mapData[randomY][randomX] !== 0) {
+                const tileWidth = 128;
+                const tileHeight = 147;
+                const tileScale = 1.5;
+
+                const offsetX = (this.mapSize - 1) * (tileWidth / 2);
+
+                // Calcola le coordinate isometriche
+                const startX = (randomX - randomY) * (tileWidth * tileScale / 2) + offsetX;
+                const startY = (randomX + randomY) * (tileHeight * tileScale / 2) / 2;
+
+                return { startX, startY };
+            }
+        }
+    }
+
+
     create() {
         DebugLogger.log('create', 'Starting scene creation.');
 
         this.mapData = generateRandomMap(this.mapSize, Object.keys(this.tileFrames).length);
         this.createTilemap();
 
-        const startX = (this.mapSize - 1) * (this.tileSize / 2);
-        const startY = (this.mapSize - 1) * (this.tileSize / 4);
+        const { startX, startY } = this.findValidPlayerPosition();
 
         // Inizializza il player come oggetto separato
         this.player = new Player(this, startX, startY, 'player');
@@ -132,12 +154,12 @@ export default class MainScene extends Phaser.Scene {
         const mapHeight = this.mapSize * tileHeight / 2; // Altezza massima della mappa
 
         // Calcolo della proiezione isometrica
-        // this.cameras.main.setBounds(
-        //     -mapWidth, // Il bordo sinistro del rombo
-        //     0,         // Il bordo superiore del rombo
-        //     mapWidth * 2, // Il bordo destro del rombo
-        //     mapHeight * 2 // Il bordo inferiore del rombo
-        // );
+        this.cameras.main.setBounds(
+            -mapWidth, // Il bordo sinistro del rombo
+            0, // Il bordo superiore del rombo
+            mapWidth * 2, // Il bordo destro del rombo
+            mapHeight * 2 // Il bordo inferiore del rombo
+        );
     }
 
     private handleResize(gameSize: { width: number; height: number }) {

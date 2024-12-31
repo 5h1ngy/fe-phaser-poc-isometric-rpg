@@ -59,7 +59,7 @@ export default class MainScene extends Phaser.Scene {
             this.player.stopMovement();
         });
 
-        this.player.update(this, 100); // Aggiorna il movimento del player
+        this.player.update(this, 1000); // Aggiorna il movimento del player
     }
 
     private waterTiles!: Phaser.Physics.Arcade.Group;
@@ -124,6 +124,22 @@ export default class MainScene extends Phaser.Scene {
         DebugLogger.log('createTilemap', 'Isometric tilemap created successfully.');
     }
 
+    private configureCameraBounds() {
+        const tileWidth = this.tileSize * 1.5; // Considera il fattore di scala
+        const tileHeight = this.tileSize * 0.75; // Metà altezza per l'isometria
+
+        const mapWidth = this.mapSize * tileWidth / 2; // Larghezza massima della mappa
+        const mapHeight = this.mapSize * tileHeight / 2; // Altezza massima della mappa
+
+        // Calcolo della proiezione isometrica
+        // this.cameras.main.setBounds(
+        //     -mapWidth, // Il bordo sinistro del rombo
+        //     0,         // Il bordo superiore del rombo
+        //     mapWidth * 2, // Il bordo destro del rombo
+        //     mapHeight * 2 // Il bordo inferiore del rombo
+        // );
+    }
+
     private handleResize(gameSize: { width: number; height: number }) {
         if (this.resizing) return;
         this.resizing = true;
@@ -133,7 +149,7 @@ export default class MainScene extends Phaser.Scene {
 
         this.scale.resize(width, height);
         this.cameras.main.setViewport(0, 0, width, height);
-        this.cameras.main.setBounds(0, 0, this.mapSize * this.tileSize, this.mapSize * this.tileSize);
+        this.configureCameraBounds()
 
         this.resizing = false;
     }

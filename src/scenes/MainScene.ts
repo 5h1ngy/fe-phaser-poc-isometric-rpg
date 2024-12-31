@@ -53,24 +53,17 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update() {
-        // Ottieni la posizione del giocatore sulla griglia
-        const gridX = Math.floor(this.player.x / (this.tileSize * 1.5 / 2));
-        const gridY = Math.floor(this.player.y / (this.tileSize * 1.5 / 4));
+        // Controlla le collisioni con i tile d'acqua
+        this.physics.world.collide(this.player, this.waterTiles, () => {
+            // Blocca il movimento solo se collide con la parte visibile
+            this.player.stopMovement();
+        });
 
-        // Blocca il movimento se il giocatore tenta di entrare in un blocco d'acqua
-        if (
-            gridX >= 0 &&
-            gridY >= 0 &&
-            gridX < this.mapSize &&
-            gridY < this.mapSize &&
-            this.collisionTiles.includes(this.mapData[gridY][gridX])
-        ) {
-            DebugLogger.log('update', `Player collided with a water block at (${gridX}, ${gridY}).`);
-            this.player.stopMovement(); // Interrompi il movimento
-        } else {
-            this.player.update(this, 100); // Aggiorna il movimento del player
-        }
+        this.player.update(this, 100); // Aggiorna il movimento del player
     }
+
+
+    private waterTiles!: Phaser.Physics.Arcade.Group;
 
     private createTilemap() {
         DebugLogger.log('createTilemap', 'Creating isometric tilemap.');
@@ -83,6 +76,12 @@ export default class MainScene extends Phaser.Scene {
         // Offset per centrare la mappa
         const offsetX = (this.mapSize - 1) * (tileWidth / 2);
         const tileScale = 1.5; // Scala applicata ai tile
+
+        // Crea un gruppo per i tile con collisioni
+        this.waterTiles = this.physics.add.group({
+            allowGravity: false,
+            immovable: true,
+        });
 
         for (let y = 0; y < this.mapSize; y++) {
             for (let x = 0; x < this.mapSize; x++) {
@@ -97,6 +96,15 @@ export default class MainScene extends Phaser.Scene {
                         .setOrigin(0.5, 1) // Origine posizionata alla base
                         .setScale(tileScale); // Scala uniforme per i tile
                     layer.add(tile);
+
+                    // Usa collisionTiles per verificare se il blocco è un ostacolo
+                    if (this.collisionTiles.includes(this.mapData[y][x])) {
+                        const collisionTile = this.physics.add.image(isoX, isoY, 'tileset', tileFrame)
+                            .setOrigin(0.5, 1)
+                            .setScale(tileScale)
+                            .setAlpha(0); // Rendi invisibile la versione interattiva per la fisica
+                        this.waterTiles.add(collisionTile);
+                    }
                 }
             }
         }
@@ -104,6 +112,8 @@ export default class MainScene extends Phaser.Scene {
         layer.setDepth(0);
         DebugLogger.log('createTilemap', 'Isometric tilemap created successfully.');
     }
+
+
 
     private handleResize(gameSize: { width: number; height: number }) {
         if (this.resizing) return;

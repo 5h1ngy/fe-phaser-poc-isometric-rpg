@@ -1,10 +1,20 @@
-export default class Player extends Phaser.GameObjects.Sprite {
+export default class Player extends Phaser.Physics.Arcade.Sprite {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
     private velocityX: number = 0;
     private velocityY: number = 0;
 
+    // Dichiarazione esplicita del tipo `body`
+    declare body: Phaser.Physics.Arcade.Body;
+
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
         super(scene, x, y, texture);
+
+        // Aggiungi il player alla scena con la fisica abilitata
+        scene.physics.add.existing(this);
+
+        // Configura il corpo fisico
+        this.body.setSize(32, 48); // Adatta le dimensioni per la maschera visibile
+        this.body.setCollideWorldBounds(true);
 
         // Aggiungi il player alla scena
         scene.add.existing(this);
@@ -56,7 +66,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.velocityX = 0;
         this.velocityY = 0;
 
-        // Controlla gli input per il movimento
         if (this.cursors.left?.isDown || scene.input.keyboard!.keys[65]?.isDown) {
             this.velocityX = -speed;
             this.velocityY = speed / 2;
@@ -87,16 +96,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
             }
         }
 
-        // Aggiorna la posizione del giocatore
-        this.x += this.velocityX * (1 / scene.game.loop.actualFps);
-        this.y += this.velocityY * (1 / scene.game.loop.actualFps);
+        this.body.setVelocity(this.velocityX, this.velocityY);
     }
 
     stopMovement() {
-        // Imposta velocità a 0 per bloccare il movimento
-        this.velocityX = 0;
-        this.velocityY = 0;
-        
+        this.body.setVelocity(0, 0);
         if (this.anims.currentAnim?.key !== 'stand') {
             this.play('stand', true);
         }

@@ -52,32 +52,33 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update() {
-        this.player.update(this, 1000); // Aggiorna il movimento del player
+        this.player.update(this, 100); // Aggiorna il movimento del player
     }
 
     private createTilemap() {
         DebugLogger.log('createTilemap', 'Creating isometric tilemap.');
         const layer = this.add.layer();
 
-        // Dimensioni corrette dei tile
+        // Dimensioni reali dei tile
         const tileWidth = 128;
         const tileHeight = 147;
 
         // Offset per centrare la mappa
         const offsetX = (this.mapSize - 1) * (tileWidth / 2);
+        const tileScale = 1.5; // Scala applicata ai tile
 
         for (let y = 0; y < this.mapSize; y++) {
             for (let x = 0; x < this.mapSize; x++) {
                 // Calcolo posizione isometrica
-                const isoX = (x - y) * (tileWidth / 2) + offsetX;
-                const isoY = (x + y) * (tileHeight / 2) / 2; // Usa tileHeight per il calcolo verticale
+                const isoX = (x - y) * (tileWidth * tileScale / 2) + offsetX;
+                const isoY = (x + y) * (tileHeight * tileScale / 2) / 2;
 
                 const tileFrame = this.tileFrames[this.mapData[y][x]];
 
                 if (tileFrame) {
                     const tile = this.add.image(isoX, isoY, 'tileset', tileFrame)
-                        .setOrigin(0.5, 1) // Imposta l'origine alla base del tile
-                        .setScale(1.5); // Scala i tile per maggiore visibilità
+                        .setOrigin(0.5, 1) // Origine posizionata alla base
+                        .setScale(tileScale); // Scala uniforme per i tile
                     layer.add(tile);
                 }
             }
@@ -86,6 +87,7 @@ export default class MainScene extends Phaser.Scene {
         layer.setDepth(0);
         DebugLogger.log('createTilemap', 'Isometric tilemap created successfully.');
     }
+
 
     private handleResize(gameSize: { width: number; height: number }) {
         if (this.resizing) return;

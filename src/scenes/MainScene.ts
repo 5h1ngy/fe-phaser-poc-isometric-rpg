@@ -33,7 +33,7 @@ export default class MainScene extends Phaser.Scene {
     create() {
         DebugLogger.log('create', 'Starting scene creation.');
 
-        this.mapData = generateRandomMap(this.mapSize, 6);
+        this.mapData = generateRandomMap(this.mapSize, Object.keys(this.tileFrames).length);
         this.createTilemap();
 
         const startX = (this.mapSize - 1) * (this.tileSize / 2);
@@ -52,22 +52,32 @@ export default class MainScene extends Phaser.Scene {
     }
 
     update() {
-        this.player.update(this, 100); // Aggiorna il movimento del player
+        this.player.update(this, 1000); // Aggiorna il movimento del player
     }
 
     private createTilemap() {
         DebugLogger.log('createTilemap', 'Creating isometric tilemap.');
         const layer = this.add.layer();
-        const offsetX = (this.mapSize - 1) * (this.tileSize / 2);
+
+        // Dimensioni corrette dei tile
+        const tileWidth = 128;
+        const tileHeight = 147;
+
+        // Offset per centrare la mappa
+        const offsetX = (this.mapSize - 1) * (tileWidth / 2);
 
         for (let y = 0; y < this.mapSize; y++) {
             for (let x = 0; x < this.mapSize; x++) {
-                const isoX = (x - y) * (this.tileSize / 2) + offsetX;
-                const isoY = (x + y) * (this.tileSize / 4);
+                // Calcolo posizione isometrica
+                const isoX = (x - y) * (tileWidth / 2) + offsetX;
+                const isoY = (x + y) * (tileHeight / 2) / 2; // Usa tileHeight per il calcolo verticale
+
                 const tileFrame = this.tileFrames[this.mapData[y][x]];
 
                 if (tileFrame) {
-                    const tile = this.add.image(isoX, isoY, 'tileset', tileFrame).setOrigin(0.5, 0.5).setScale(1.5);
+                    const tile = this.add.image(isoX, isoY, 'tileset', tileFrame)
+                        .setOrigin(0.5, 1) // Imposta l'origine alla base del tile
+                        .setScale(1.5); // Scala i tile per maggiore visibilità
                     layer.add(tile);
                 }
             }

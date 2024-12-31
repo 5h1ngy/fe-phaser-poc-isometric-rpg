@@ -62,7 +62,6 @@ export default class MainScene extends Phaser.Scene {
         this.player.update(this, 100); // Aggiorna il movimento del player
     }
 
-
     private waterTiles!: Phaser.Physics.Arcade.Group;
 
     private createTilemap() {
@@ -124,9 +123,6 @@ export default class MainScene extends Phaser.Scene {
         layer.setDepth(0);
         DebugLogger.log('createTilemap', 'Isometric tilemap created successfully.');
     }
-
-
-
 
     private handleResize(gameSize: { width: number; height: number }) {
         if (this.resizing) return;

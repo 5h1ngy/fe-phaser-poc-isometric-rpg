@@ -83,6 +83,10 @@ export default class MainScene extends Phaser.Scene {
             immovable: true,
         });
 
+        // Aggiungi un oggetto grafico per disegnare i bordi
+        const graphics = this.add.graphics();
+        graphics.lineStyle(2, 0xff0000, 1); // Colore rosso per i bordi (RGB: 255, 0, 0)
+
         for (let y = 0; y < this.mapSize; y++) {
             for (let x = 0; x < this.mapSize; x++) {
                 // Calcolo posizione isometrica
@@ -104,6 +108,14 @@ export default class MainScene extends Phaser.Scene {
                             .setScale(tileScale)
                             .setAlpha(0); // Rendi invisibile la versione interattiva per la fisica
                         this.waterTiles.add(collisionTile);
+
+                        // Disegna un rettangolo rosso attorno al tile
+                        graphics.strokeRect(
+                            isoX - (tileWidth * tileScale / 2), // Posizione X
+                            isoY - (tileHeight * tileScale),    // Posizione Y
+                            tileWidth * tileScale,             // Larghezza
+                            tileHeight * tileScale             // Altezza
+                        );
                     }
                 }
             }
@@ -112,6 +124,7 @@ export default class MainScene extends Phaser.Scene {
         layer.setDepth(0);
         DebugLogger.log('createTilemap', 'Isometric tilemap created successfully.');
     }
+
 
 
 

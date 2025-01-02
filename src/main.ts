@@ -1,3 +1,4 @@
+// src/main.ts
 import Phaser from 'phaser';
 import MainScene from '@/scenes/MainScene';
 import { injectCSS } from '@/utils/CSSInjector';
@@ -10,13 +11,13 @@ const config: Phaser.Types.Core.GameConfig = {
     scene: MainScene,
     physics: {
         default: 'arcade',
-        arcade: { debug: false },
+        arcade: { debug: true }
     },
     scale: {
         mode: Phaser.Scale.RESIZE,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
+        autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    parent: 'app',
+    parent: 'app'
 };
 
 // Inizializza il gioco

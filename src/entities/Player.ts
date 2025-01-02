@@ -1,3 +1,4 @@
+// src/entities/Player.ts
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
     private velocityX: number = 0;
@@ -13,14 +14,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
 
         // Configura il corpo fisico
-        this.body.setSize(32, 48); // Adatta le dimensioni per la maschera visibile
-        this.body.setCollideWorldBounds(true);
+        this.body.setSize(32, 48);
+        // Commentiamo per evitare che i confini del mondo blocchino il player
+        // this.body.setCollideWorldBounds(true);
 
         // Aggiungi il player alla scena
         scene.add.existing(this);
         this.setOrigin(0.5, 0.5).setScale(1.5);
 
-        // Configura gli input da tastiera
+        // Configura gli input da tastiera (W,A,S,D + frecce)
         this.cursors = scene.input.keyboard!.createCursorKeys();
         scene.input.keyboard!.addKeys('W,A,S,D');
     }
@@ -28,37 +30,37 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     createAnimations(scene: Phaser.Scene) {
         scene.anims.create({
             key: 'stand',
-            frames: [{ key: 'player', frame: 'walk_down_0' }], // Assicurati che "stand" sia un frame valido
+            frames: [{ key: 'player', frame: 'walk_down_0' }],
             frameRate: 10,
-            repeat: -1,
+            repeat: -1
         });
 
         scene.anims.create({
             key: 'walkRight',
             frames: scene.anims.generateFrameNames('player', { prefix: 'walk_right_', start: 0, end: 8 }),
             frameRate: 10,
-            repeat: -1,
+            repeat: -1
         });
 
         scene.anims.create({
             key: 'walkLeft',
             frames: scene.anims.generateFrameNames('player', { prefix: 'walk_left_', start: 0, end: 8 }),
             frameRate: 10,
-            repeat: -1,
+            repeat: -1
         });
 
         scene.anims.create({
             key: 'walkUp',
             frames: scene.anims.generateFrameNames('player', { prefix: 'walk_left_', start: 0, end: 8 }),
             frameRate: 10,
-            repeat: -1,
+            repeat: -1
         });
 
         scene.anims.create({
             key: 'walkDown',
             frames: scene.anims.generateFrameNames('player', { prefix: 'walk_right_', start: 0, end: 8 }),
             frameRate: 10,
-            repeat: -1,
+            repeat: -1
         });
     }
 
@@ -66,36 +68,46 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.velocityX = 0;
         this.velocityY = 0;
 
+        // Tasti A o freccia sinistra
         if (this.cursors.left?.isDown || scene.input.keyboard!.keys[65]?.isDown) {
             this.velocityX = -speed;
             this.velocityY = speed / 2;
             if (this.anims.currentAnim?.key !== 'walkLeft') {
                 this.play('walkLeft', true);
             }
-        } else if (this.cursors.right?.isDown || scene.input.keyboard!.keys[68]?.isDown) {
+        }
+        // Tasti D o freccia destra
+        else if (this.cursors.right?.isDown || scene.input.keyboard!.keys[68]?.isDown) {
             this.velocityX = speed;
             this.velocityY = -speed / 2;
             if (this.anims.currentAnim?.key !== 'walkRight') {
                 this.play('walkRight', true);
             }
-        } else if (this.cursors.up?.isDown || scene.input.keyboard!.keys[87]?.isDown) {
+        }
+        // Tasti W o freccia su
+        else if (this.cursors.up?.isDown || scene.input.keyboard!.keys[87]?.isDown) {
             this.velocityX = -speed;
             this.velocityY = -speed / 2;
             if (this.anims.currentAnim?.key !== 'walkUp') {
                 this.play('walkUp', true);
             }
-        } else if (this.cursors.down?.isDown || scene.input.keyboard!.keys[83]?.isDown) {
+        }
+        // Tasti S o freccia giù
+        else if (this.cursors.down?.isDown || scene.input.keyboard!.keys[83]?.isDown) {
             this.velocityX = speed;
             this.velocityY = speed / 2;
             if (this.anims.currentAnim?.key !== 'walkDown') {
                 this.play('walkDown', true);
             }
-        } else {
+        }
+        // Nessun input: stand
+        else {
             if (this.anims.currentAnim?.key !== 'stand') {
                 this.play('stand', true);
             }
         }
 
+        // Applica la velocità
         this.body.setVelocity(this.velocityX, this.velocityY);
     }
 

@@ -1,3 +1,4 @@
+// src/utils/DebugLogger.ts
 export class DebugLogger {
     static log(method: string, message: string, data?: any) {
         const color = 'color: cyan';

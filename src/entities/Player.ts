@@ -6,24 +6,14 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
     private velocityY: number = 0;
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
-        // In Matter, passiamo `scene.matter.world` al costruttore
         super(scene.matter.world, x, y, texture);
-
-        // Aggiungiamo lo sprite alla scena
         scene.add.existing(this);
 
-        // Impostiamo un body di base (rettangolare) di dimensioni simili a 32×48
         this.setRectangle(32, 48);
-        // Se non vuoi rotazioni involontarie:
         this.setFixedRotation();
-
-        // Se serve, regoli friction e altre proprietà fisiche
         this.setFrictionAir(0.02);
-
-        // Origin (0.5,0.5), scala 1.5 come avevi prima
         this.setOrigin(0.5, 0.5).setScale(1.5);
 
-        // Configura input tastiera (W,A,S,D + frecce)
         this.cursors = scene.input.keyboard!.createCursorKeys();
         scene.input.keyboard!.addKeys('W,A,S,D');
     }
@@ -69,7 +59,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
         this.velocityX = 0;
         this.velocityY = 0;
 
-        // Tasti A o freccia sinistra => diagonale “isometrica”
         if (this.cursors.left?.isDown || scene.input.keyboard!.keys[65]?.isDown) {
             this.velocityX = -speed;
             this.velocityY = speed / 2;
@@ -77,7 +66,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 this.play('walkLeft', true);
             }
         }
-        // Tasti D o freccia destra
         else if (this.cursors.right?.isDown || scene.input.keyboard!.keys[68]?.isDown) {
             this.velocityX = speed;
             this.velocityY = -speed / 2;
@@ -85,7 +73,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 this.play('walkRight', true);
             }
         }
-        // Tasti W o freccia su
         else if (this.cursors.up?.isDown || scene.input.keyboard!.keys[87]?.isDown) {
             this.velocityX = -speed;
             this.velocityY = -speed / 2;
@@ -93,7 +80,6 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 this.play('walkUp', true);
             }
         }
-        // Tasti S o freccia giù
         else if (this.cursors.down?.isDown || scene.input.keyboard!.keys[83]?.isDown) {
             this.velocityX = speed;
             this.velocityY = speed / 2;
@@ -101,14 +87,12 @@ export default class Player extends Phaser.Physics.Matter.Sprite {
                 this.play('walkDown', true);
             }
         }
-        // Nessun input => stand
         else {
             if (this.anims.currentAnim?.key !== 'stand') {
                 this.play('stand', true);
             }
         }
 
-        // In Matter, usiamo this.setVelocity anziché body.setVelocity
         this.setVelocity(this.velocityX, this.velocityY);
     }
 

@@ -1,28 +1,29 @@
-// src/entities/Player.ts
-export default class Player extends Phaser.Physics.Arcade.Sprite {
+import Phaser from 'phaser';
+
+export default class Player extends Phaser.Physics.Matter.Sprite {
     private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
     private velocityX: number = 0;
     private velocityY: number = 0;
 
-    // Dichiarazione esplicita del tipo `body`
-    declare body: Phaser.Physics.Arcade.Body;
-
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
-        super(scene, x, y, texture);
+        // In Matter, passiamo `scene.matter.world` al costruttore
+        super(scene.matter.world, x, y, texture);
 
-        // Aggiungi il player alla scena con la fisica abilitata
-        scene.physics.add.existing(this);
-
-        // Configura il corpo fisico
-        this.body.setSize(32, 48);
-        // Commentiamo per evitare che i confini del mondo blocchino il player
-        // this.body.setCollideWorldBounds(true);
-
-        // Aggiungi il player alla scena
+        // Aggiungiamo lo sprite alla scena
         scene.add.existing(this);
+
+        // Impostiamo un body di base (rettangolare) di dimensioni simili a 32×48
+        this.setRectangle(32, 48);
+        // Se non vuoi rotazioni involontarie:
+        this.setFixedRotation();
+
+        // Se serve, regoli friction e altre proprietà fisiche
+        this.setFrictionAir(0.02);
+
+        // Origin (0.5,0.5), scala 1.5 come avevi prima
         this.setOrigin(0.5, 0.5).setScale(1.5);
 
-        // Configura gli input da tastiera (W,A,S,D + frecce)
+        // Configura input tastiera (W,A,S,D + frecce)
         this.cursors = scene.input.keyboard!.createCursorKeys();
         scene.input.keyboard!.addKeys('W,A,S,D');
     }
@@ -68,7 +69,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.velocityX = 0;
         this.velocityY = 0;
 
-        // Tasti A o freccia sinistra
+        // Tasti A o freccia sinistra => diagonale “isometrica”
         if (this.cursors.left?.isDown || scene.input.keyboard!.keys[65]?.isDown) {
             this.velocityX = -speed;
             this.velocityY = speed / 2;
@@ -100,19 +101,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 this.play('walkDown', true);
             }
         }
-        // Nessun input: stand
+        // Nessun input => stand
         else {
             if (this.anims.currentAnim?.key !== 'stand') {
                 this.play('stand', true);
             }
         }
 
-        // Applica la velocità
-        this.body.setVelocity(this.velocityX, this.velocityY);
+        // In Matter, usiamo this.setVelocity anziché body.setVelocity
+        this.setVelocity(this.velocityX, this.velocityY);
     }
 
     stopMovement() {
-        this.body.setVelocity(0, 0);
+        this.setVelocity(0, 0);
         if (this.anims.currentAnim?.key !== 'stand') {
             this.play('stand', true);
         }

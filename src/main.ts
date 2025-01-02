@@ -9,9 +9,13 @@ const config: Phaser.Types.Core.GameConfig = {
     width: window.innerWidth,
     height: window.innerHeight,
     scene: MainScene,
+    // Carichiamo solo la MainScene per semplicità
     physics: {
-        default: 'arcade',
-        arcade: { debug: true }
+        default: 'matter', // <-- cambia da 'arcade' a 'matter'
+        matter: {
+            debug: true,    // per vedere i corpi di collisione
+            gravity: { y: 0, x: 0 } // se vuoi un mondo top-down senza gravità
+        }
     },
     scale: {
         mode: Phaser.Scale.RESIZE,

@@ -174,11 +174,10 @@ export default class MainScene extends Phaser.Scene {
         sprite.setBody({
             type: 'fromVertices',
             verts: [
-                { x: -58, y: 0 },
-                { x: 58, y: 0 },
-                { x: 58, y: -100 },
-                { x: 0, y: -130 },
-                { x: -58, y: -100 }
+                { x: 0,   y: -32 },  
+                { x: 64,  y: 0   },  
+                { x: 0,   y: 32  },  
+                { x: -64, y: 0   }
             ],
             // la geometria è centrata sul (0,0) del body, 
             // che corrisponde al center del frame. A volte serve un offset se l'origin non è (0.5,0.5).

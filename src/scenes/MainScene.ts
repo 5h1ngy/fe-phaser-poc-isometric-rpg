@@ -172,7 +172,14 @@ export default class MainScene extends Phaser.Scene {
         // gioca con questi numeri per allineare perfettamente.
 
         sprite.setBody({
-            type: 'rectangle',
+            type: 'fromVertices',
+            verts: [
+                { x: -58, y: 0 },
+                { x: 58, y: 0 },
+                { x: 58, y: -100 },
+                { x: 0, y: -130 },
+                { x: -58, y: -100 }
+            ],
             // la geometria è centrata sul (0,0) del body, 
             // che corrisponde al center del frame. A volte serve un offset se l'origin non è (0.5,0.5).
             width: realW,
@@ -211,7 +218,7 @@ export default class MainScene extends Phaser.Scene {
         // setBounds(x, y, width, height, thickness)
         // x,y => top-left, width,height => dimensioni
         // thickness => spessore dei muri
-        this.matter.world.setBounds(0, 0, 5000, 5000); 
+        this.matter.world.setBounds(0, 0, 5000, 5000);
         // Decidi tu i parametri. 
         // Se la mappa "finisce" a maxX, maxY calcolati, mettili qui.
     }
@@ -224,7 +231,7 @@ export default class MainScene extends Phaser.Scene {
         const halfH = this.isoHeight * this.isoScale / 2;
         const offsetX = (this.mapSize - 1) * halfW;
 
-        const minX = 0; 
+        const minX = 0;
         const maxX = (this.mapSize - 1) * halfW + offsetX;
 
         const minY = 0;

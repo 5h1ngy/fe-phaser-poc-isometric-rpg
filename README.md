@@ -11,6 +11,10 @@
 
 **fe-phaser-poc-isometric-rpg** is a proof of concept based on Phaser for an isometric RPG game.
 
+<p align="center">
+      <img src="./assets/preview.png" style="height: 350px; object-fit: contain;">
+</p>
+
 ## **Table of Contents**
 
 - [Introduction](#introduction)

@@ -1,7 +1,16 @@
-// src/utils/CSSInjector.ts
-export function injectCSS() {
+/**
+ * Injects CSS styles into the document to ensure consistent rendering for the game canvas.
+ * 
+ * The injected CSS includes:
+ * - Reset for margins and paddings.
+ * - Fullscreen scaling for the canvas element.
+ * - Hidden overflow for the HTML and body elements.
+ */
+export function injectCSS(): void {
     const style = document.createElement('style');
     style.type = 'text/css';
+
+    // CSS rules for consistent layout
     style.innerHTML = `
         * {
             margin: 0;
@@ -26,5 +35,7 @@ export function injectCSS() {
             height: 100vh;
         }
     `;
+
+    // Append the style element to the document head
     document.head.appendChild(style);
 }

@@ -27,6 +27,7 @@
     "start:dev": "vite --host 0.0.0.0 --port 5173 --mode dev",
     "start:prod": "vite preview --host 0.0.0.0 --port 5174 --mode prod --outDir build/fe-phaser-poc-isometric-rpg",
     "build:prod": "tsc -b && vite build --mode prod --outDir build/fe-phaser-poc-isometric-rpg",
+    "build:docs": "typedoc",
     "clean": "rm -rfdv build node_modules .yarn .yarn-cache",
     "update": "yarn up '*@latest'"
   },
@@ -35,6 +36,7 @@
     "dotenv": "^16.4.5",
     "gsap": "^3.12.5",
     "phaser": "^3.87.0",
+    "typedoc": "^0.27.2",
     "typescript": "~5.7.2",
     "vite": "^6.0.5",
     "vite-tsconfig-paths": "^5.1.3"

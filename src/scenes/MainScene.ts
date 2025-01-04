@@ -58,25 +58,14 @@ export default class MainScene extends Phaser.Scene {
 
         this.load.atlas(
             'tileset',
-            import.meta.env.VITE_MODE === "dev"
-                ? 'public/assets/tileset/ai_blocks.png'
-                : `${import.meta.env.VITE_BASENAME}/` + 'assets/tileset/ai_blocks.png',
-
-            import.meta.env.VITE_MODE === "dev"
-                ? 'public/assets/tileset/ai_blocks.json'
-                : `${import.meta.env.VITE_BASENAME}/` + 'assets/tileset/ai_blocks.json',
+            import.meta.env.VITE_BASENAME + '/assets/tileset/ai_blocks.png',
+            import.meta.env.VITE_BASENAME + '/assets/tileset/ai_blocks.json',
         );
 
         this.load.atlas(
             'player',
-
-            import.meta.env.VITE_MODE === "dev"
-                ? 'public/assets/spritesheet/lpc_naked.png'
-                : `${import.meta.env.VITE_BASENAME}/` + 'assets/spritesheet/lpc_naked.png',
-
-            import.meta.env.VITE_MODE === "dev"
-                ? 'public/assets/spritesheet/lpc_naked.json'
-                : `${import.meta.env.VITE_BASENAME}/` + 'assets/spritesheet/lpc_naked.json',
+            import.meta.env.VITE_BASENAME + '/assets/spritesheet/lpc_naked.png',
+            import.meta.env.VITE_BASENAME + '/assets/spritesheet/lpc_naked.json',
         );
 
         DebugLogger.log('preload', 'Assets loaded successfully.');

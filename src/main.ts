@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import MainScene from '@/scenes/MainScene';
-import { injectCSS } from '@/utils/CSSInjector';
+import { injectCSS, setFavicon } from '@/utils/shared';
+
+setFavicon(import.meta.env.VITE_BASENAME + "/logo.png")
 
 /**
  * Configurazione del gioco Phaser.

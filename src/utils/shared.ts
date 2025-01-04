@@ -39,3 +39,18 @@ export function injectCSS(): void {
     // Append the style element to the document head
     document.head.appendChild(style);
 }
+
+export function setFavicon(faviconUrl: string): void {
+    // Cerca un elemento <link> esistente con rel="icon"
+    let link: HTMLLinkElement | null = document.querySelector('link[rel="icon"]');
+
+    // Se non esiste, creane uno nuovo
+    if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.head.appendChild(link);
+    }
+
+    // Imposta l'URL della favicon
+    link.href = faviconUrl;
+}

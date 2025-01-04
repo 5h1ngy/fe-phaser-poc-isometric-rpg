@@ -11,6 +11,7 @@ lerna-debug.log*
 .yarn-cache
 node_modules
 build
+docs
 build-ssr
 *.local
 
